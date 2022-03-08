@@ -67,13 +67,24 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'role:1'], function (
     #Route::get('/peminjaman/request/{peminjaman:id}/accept', [PeminjamanController::class, 'acceptRequestPeminjaman']);
     Route::delete('/peminjaman/request/{peminjaman:id}/delete', [PeminjamanController::class, 'deleteRequestPeminjaman']);
     #Route::get('/peminjaman/{peminjaman:id}/return', [PeminjamanController::class, 'kembali']);
+    Route::get('/report', [PeminjamanController::class, 'userDenda']);
+    Route::delete('/peminjaman/{peminjaman:id}/delete', [PeminjamanController::class, 'destroy']);
+
+    #EXPORT EXCEL PEMINJAMAN
+    Route::get('/peminjaman/export_excel', [PeminjamanController::class, 'export_excel']);
 
     Route::post('/peminjaman/accept', [PeminjamanController::class, 'acceptPinjam']);
     Route::post('/peminjaman/return', [PeminjamanController::class, 'kembali']);
     // SURAT BEBAS PUSTAKA
+    Route::get('/sbp/view', [RequestController::class, 'viewData']);
     Route::get('/sbp', [RequestController::class, 'sbp']);
     Route::get('/sbp/{rekues:id}/accept', [RequestController::class, 'acceptSbp']);
     Route::delete('/sbp/{rekues:id}/delete', [RequestController::class, 'rejectSbp']);
+    Route::delete('/sbp/view/{rekues:id}/delete', [RequestController::class, 'destroy']);
+
+    #EXPORT EXCEL PEMINJAMAN
+    Route::get('/sbp/view/export_excel', [RequestController::class, 'export_excel']);
+
     // MANAGE USER
     Route::get('/user', [AdminController::class, 'manageUser']);
     Route::get('/user/{user:id}/edit', [UserController::class, 'edit']);

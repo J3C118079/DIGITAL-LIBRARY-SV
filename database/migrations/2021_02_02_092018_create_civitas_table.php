@@ -15,9 +15,7 @@ class CreateCivitasTable extends Migration
     {
         Schema::create('civitas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->enum('nama', ['Admin', 'Dosen', 'Mahasiswa Akhir','Mahasiswa' ]);
-            // $table->foreignId('unit_id');
-            // $table->string('titles');
+            $table->enum('nama', ['Admin', 'Dosen', 'Mahasiswa Akhir', 'Mahasiswa']);
             $table->softDeletes();
             $table->timestamps();
         });

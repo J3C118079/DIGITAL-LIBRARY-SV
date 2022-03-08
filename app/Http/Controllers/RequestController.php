@@ -9,6 +9,9 @@ use App\Models\Rekues;
 use App\Models\User;
 use DateTime;
 use DB;
+use Carbon\Carbon;
+use App\Exports\SbpExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RequestController extends Controller
 {
@@ -86,6 +89,13 @@ class RequestController extends Controller
             'sbp' => Rekues::where('status', '0')->latest()->paginate(8),
         ]);
     }
+
+    public function viewData()
+    {
+        return view('admin.view_sbp', [
+            'sbp' => Rekues::where('status', '1')->get()
+        ]);
+    }
     public function acceptSbp(Rekues $rekues)
     {
         // dd($peminjaman['id']);
@@ -102,5 +112,16 @@ class RequestController extends Controller
         return response()->json([
             'data' => Rekues::where('status', '0')->count()
         ]);
+    }
+
+    public function destroy(Rekues $rekues){
+        $rekues->delete();
+        session()->flash('success', 'Data berhasil terhapus');
+        return redirect()->to('/administrator/sbp/view');
+    }
+
+    public function export_excel(){
+        $now = Carbon::now();
+        return Excel::download(new SbpExport, 'SBP-'.$now.'.xlsx');
     }
 }

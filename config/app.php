@@ -165,6 +165,7 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
         
         Milon\Barcode\BarcodeServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -232,6 +233,7 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'DNS1D' => 'Milon\Barcode\Facades\DNS1DFacade',
         'DNS2D' => 'Milon\Barcode\Facades\DNS2DFacade',
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];

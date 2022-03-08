@@ -37,10 +37,26 @@
                     </a>
                 </li>
                 <li class="{{ request()->is('administrator/sbp*') ? ' active' : '' }}">
-                    <a href="/administrator/sbp">
+                    <a data-toggle="collapse" href="#sbp" role="button" aria-expanded="false" aria-controls="user">
                         <i class="nc-icon nc-email-85"></i>
-                        <p>Bebas pustaka <span class="badge badge-warning" id="badgeSbp"></span></p>
+                        <p>Bebas Pustaka<span class="badge badge-warning badgeUser"></span></p>
                     </a>
+                    <div class="collapse" id="sbp">
+                        <ul class="nav ml-3">
+                            <li>
+                                <a href="/administrator/sbp">
+                                    <i class="nc-icon nc-email-85"></i>
+                                    <p>Request SBP</p></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/administrator/sbp/view">
+                                    <i class="nc-icon nc-email-85"></i>
+                                    <p>Lihat SBP</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
                 <li class="{{ request()->is('administrator/peminjaman*') ? ' active' : '' }}">
                     <a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
@@ -93,6 +109,11 @@
                         <p>Bantuan</p>
                     </a>
                 </li>
+                <li>
+                    <a href="/administrator/report">
+                        <p>REPORT</p>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
@@ -130,10 +151,8 @@
                     const response = await fetch("{{ url('/administrator/countUser') }}");
                     const data = await response.json()
                     data.data > 0 ? $(".badgeUser").html(data.data) : "";
-                    console.log(data);
                 }
                 getUserData();
-                console.log("YIHHA");
             })
 
         </script>

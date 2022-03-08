@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Peminjaman;
 use Carbon\Carbon;
 
+use Illuminate\Support\Facades\DB;
+use App\Exports\PeminjamanExport;
+use Maatwebsite\Excel\Facades\Excel;
+
+
 class PeminjamanController extends Controller
 {
     public function acceptRequestPeminjaman(Peminjaman $peminjaman)
@@ -32,22 +37,21 @@ class PeminjamanController extends Controller
     //     $peminjaman->save();
     //     session()->flash('success', 'Data peminjaman berhasil diupdate');
     //     return redirect()->back();
-        
+
     // }
 
     public function kembali(Request $request)
     {
         $peminjaman = Peminjaman::where('id', $request->id_pinjam)->get();
 
-        if($peminjaman->count() != null)
-        {
+        if ($peminjaman->count() != null) {
             $dataPinjam = Peminjaman::find($request->id_pinjam);
-            if($dataPinjam->status !== 'Dikembalikan' ) {
+            if ($dataPinjam->status !== 'Dikembalikan') {
                 $dataPinjam->status = 'Dikembalikan';
                 $dataPinjam->save();
                 session()->flash('success', 'Buku berhasil dikembalikan');
                 return redirect()->back();
-            }else{
+            } else {
                 session()->flash('error', 'Buku sudah dikembalikan');
                 return redirect()->back();
             }
@@ -55,7 +59,7 @@ class PeminjamanController extends Controller
 
 
         session()->flash('error', 'Data peminjaman gagal diupdate');
-            return redirect()->back();
+        return redirect()->back();
     }
 
     public function deleteRequestPeminjaman(Peminjaman $peminjaman)
@@ -77,6 +81,7 @@ class PeminjamanController extends Controller
         }
         return $denda;
     }
+
     public function countPinjam()
     {
         return response()->json([
@@ -88,8 +93,7 @@ class PeminjamanController extends Controller
     {
         $peminjaman = Peminjaman::where('id', $request->id_pinjam)->get();
 
-        if($peminjaman->count() != null)
-        {
+        if ($peminjaman->count() != null) {
             $dataPinjam = Peminjaman::find($request->id_pinjam);
             $dataPinjam->allowed = '1';
 
@@ -107,5 +111,34 @@ class PeminjamanController extends Controller
 
         session()->flash('error', 'Buku gagal dipinjam');
         return redirect()->back();
+    }
+
+    public function userDenda()
+    {
+//        dd(DB::table('peminjamen')
+//            ->join('users', 'peminjamen.user_id', '=', 'users.id')
+//            ->join('bukus', 'peminjamen.buku_id', '=', 'bukus.id')
+//            ->select('users.*', 'peminjamen.*', 'bukus.judul')
+//            ->where('peminjamen.status', '=', 'Denda')
+//            ->get());
+        return view('admin.report_denda', [
+            'user' => DB::table('peminjamen')
+                ->join('users', 'peminjamen.user_id', '=', 'users.id')
+                ->join('bukus', 'peminjamen.buku_id', '=', 'bukus.id')
+                ->select('users.*', 'peminjamen.*', 'bukus.judul')
+                ->where('peminjamen.status', '=', 'Denda')
+                ->get()
+        ]);
+    }
+
+    public function destroy(Peminjaman $peminjaman){
+        $peminjaman->delete();
+        session()->flash('success', 'Data berhasil terhapus');
+        return redirect()->to('/administrator/peminjaman');
+    }
+
+    public function export_excel(){
+        $now = Carbon::now();
+        return Excel::download(new PeminjamanExport, 'peminjaman-'.$now.'.xlsx');
     }
 }

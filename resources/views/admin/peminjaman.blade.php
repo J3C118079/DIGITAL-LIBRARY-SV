@@ -15,6 +15,7 @@
                             <button type="submit" class="ml-1 btn btn-primary btn-fab btn-icon btn-round"><i
                                     class="nc-icon nc-zoom-split"></i></button>
                         </form>--}}
+                        <a href="/administrator/peminjaman/export_excel" role="button" class="btn btn-success btn-fab p-2">Export</a>
                         <div class="table-responsive">
                             <table class="table">
                                 <thead class=" text-primary">
@@ -55,6 +56,15 @@
                                                             class="btn btn-primary btn-sm text-capitalize font-weight-normal" data-toggle="modal" data-target="#pinjamModal">Return
                                                         </a>
                                                 @endif
+                                                <form action="/administrator/peminjaman/{{ $b->id }}/delete"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button type="submit"
+                                                        onclick="return confirm('Yakin ingin menghapus Data?')"
+                                                        href="/administrator/peminjaman/{{ $b->id }}/delete"
+                                                        class="ml-1 btn btn-danger btn-sm text-capitalize font-weight-normal">Hapus</button>
+                                                </form>
                                                 </td>
                                                 <td>
                                                     {{$b->civitas->nama}} 
